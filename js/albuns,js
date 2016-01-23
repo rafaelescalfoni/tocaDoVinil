@@ -1,0 +1,72 @@
+{"albuns": [
+	"album": { 
+		"id" : "1",
+		"titulo": "Abre-te, Sésamo!",
+		"artista": "Raul Seixas",
+		"genero": "Rock Brasileiro",
+		"ano": "1976",
+		"pathImgAlbum": "./img/raul-seixas_abretesesamo.jpg",
+		"valor": "R$ 50,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	},
+	"album": { 
+		"id" : "2",
+		"titulo": "Anjo Avesso",
+		"artista": "Alceu Valença",
+		"genero": "MPB",
+		"ano": "1983",
+		"pathImgAlbum": "./img/alceu_AnjoAvesso.jpg",
+		"valor": "R$ 55,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	},
+	"album": { 
+		"id" : "3",
+		"titulo": "Charlie Mingus - Unplugged",
+		"artista": "Charlie Mingus",
+		"genero": "Jazz",
+		"ano": "1963",
+		"pathImgAlbum": "./img/charliemingus.jpg",
+		"valor": "R$ 45,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	},
+	"album": { 
+		"id" : "4",
+		"titulo": "Earth, Wind & Fire - In Concert",
+		"artista": "Earth, Wind & Fire",
+		"genero": "Black music",
+		"ano": "1978",
+		"pathImgAlbum": "./img/earthwindfire_inConcert.jpg",
+		"valor": "R$ 40,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	},
+	"album": { 
+		"id" : "5",
+		"titulo": "Rod",
+		"artista": "Rod Stewart",
+		"genero": "Rock Pop",
+		"ano": "1975",
+		"pathImgAlbum": "./img/rodStewart.jpg",
+		"valor": "R$ 30,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	},
+	"album": { 
+		"id" : "6",
+		"titulo": "Metallica",
+		"artista": "Metallica",
+		"genero": "Heavy Metal",
+		"ano": "1985",
+		"pathImgAlbum": "./img/metallica.jpg",
+		"valor": "R$ 40,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	},
+	"album": { 
+		"id" : "7",
+		"titulo": "Men Women",
+		"artista": "Simple Red",
+		"genero": "Pop",
+		"ano": "1989",
+		"pathImgAlbum": "./img/simplered_menWomen.jpg",
+		"valor": "R$ 40,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	}
+]};

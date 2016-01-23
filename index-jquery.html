@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Toca do Vinil - JQuery</title>
+		<link rel="stylesheet" type="text/css" href="./css/estilo.css" />
+		<link rel="stylesheet" type="text/css" href="./js/jquery-ui.css" />
+		<script src="./js/jquery.js"></script>
+		<script src="./js/jquery-ui.js"></script>
+		
+		
+		<script>
+		
+		$(function() {	
+			var album1 = new Album();
+			var album2 = new Album();
+			album1.id = "1";
+			album2.id = "2";
+			album2.titulo = "Anjo Avesso";
+			album2.pathImgAlbum = "./img/alceu_AnjoAvesso.jpg";
+			album2.preco = "R$ 40,00";
+
+			//pegar os albuns de algum lugar
+			var albuns = [album1, album2];
+			$(albuns).load("http://localhost:8888/tocaDoVinil/albuns.php");
+			//carregar na página
+			$(albuns).each(function(pos, album){
+				criaItem(album);
+			})
+				
+			
+		});
+
+			function criaItem(album) {
+				$("#listaAlbuns")
+					.append($("<li />")
+						.append($("<figure />")
+							.append($("<img />")
+								.attr("src", album.pathImgAlbum)
+							)
+							.append($("<figcaption />").text(album.titulo))
+						)
+						.append($("<div />")
+							.append($("<span />")
+								.addClass("preco")
+								.text(album.preco)
+							)
+							.append($("<label />").text("Quantidade"))
+							.append($("<input />")
+								.attr({ "type": "number", "value": "0"})
+							)
+							.append($("<a />")
+								.attr("href", "#")
+								.text("Adicionar ao carrinho")
+							)
+							.addClass("compra")
+						)
+						.attr("id", album.id)
+					);
+			}
+		
+		function Album (){
+			this.id = "1";
+			this.titulo = "Abre-te, Sésamo!";
+			this.artista = "Raul Seixas";
+			this.genero = "Rock Brasileiro";
+			this.ano = "1976";
+			this.pathImgAlbum = "./img/raul-seixas_abretesesamo.jpg";
+			this.valor = "R$ 50,00";
+			this.musicas = ["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"];
+		}
+			
+		</script>
+	</head>
+	<body>
+		<header>
+			Toca do Vinil
+		</header>
+		<div id="container">
+			<section>
+				<ul id="listaAlbuns"></ul>
+			</section>
+			<aside>
+				<h1>Minhas Compras</h1>
+				<a href="#">Meu carrinho</a>
+				<ul id="lista">
+				</ul>
+				<ul>
+					<li>Itens: <span id="itens">0</span></li>
+					<li>Valor: R$ <span id="valorTotal">0</span> </li>
+				</ul>
+			</aside>
+
+		</div>
+		<footer>
+			&copy;2016 - Cefet-RJ Nova Friburgo <span>Todos os direitos reservados</span>
+		</footer>
+	</body>
+</html>

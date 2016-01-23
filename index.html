@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<link rel="stylesheet" type="text/css" href="./css/estilo.css" />
+		<script type="text/javascript">
+
+		//cuidado com Cross Site Scripting (XSS)
+			function calculaTotal(link) {
+				var valorAtual = document.getElementById("valorTotal").innerText;
+				var qtdAtual = document.getElementById("itens").innerText;
+				var divPai = link.parentNode;
+				var iptQtdArtigos = link.previousElementSibling;
+				var valorStr = divPai.getElementsByTagName("span")[0].innerText;
+				var valor = parseFloat(valorStr.substr(2, valorStr.length));
+				var qtdArtigos = parseInt(iptQtdArtigos.value);
+				if(isNaN(qtdArtigos)|| qtdArtigos==0) {
+					qtdArtigos = 0;
+				} else {
+					document.getElementById("valorTotal").innerText = parseFloat(valorAtual) + (qtdArtigos*valor);
+					document.getElementById("itens").innerText = parseInt(qtdAtual) + parseInt(qtdArtigos);
+					addCart(divPai.parentNode, qtdArtigos, valor);
+				}
+				return 0;
+			}
+
+			function addCart(liPai, qtdArtigos, precoUnitario) {
+				var ulLista = document.getElementById("lista");
+				var legenda = liPai.getElementsByTagName("figcaption")[0].innerHTML.replace("<figcaption>","");
+				legenda = legenda.replace("</figcaption>", "");
+				ulLista.innerHTML += "<li>" + legenda 
+									+ " - " + qtdArtigos 
+									+ " unidades - preço unitário R$" 
+									+ precoUnitario + "</li>";
+				return 0;
+			}
+		</script>
+		<title>Toca do Vinil</title>
+	</head>
+	<body>
+		<header>
+			Toca do Vinil
+		</header>
+		<div id="container">
+			<section>
+				<ul>
+					<li>
+						<figure>
+							<img src="./img/raul-seixas_abretesesamo.jpg" />
+							<figcaption>Raul Seixas - Abre-te Sésamo</figcaption>
+						</figure>
+						<div class="compra">
+							<span class="preco">R$ 50,00</span>
+							<label>Quantidade</label>
+							<input type="number" value="0" />
+							<a href="#" onClick="calculaTotal(this)">Adicionar ao carrinho</a>
+						</div>
+					</li>
+					<li>
+						<figure>
+							<img src="./img/alceu_AnjoAvesso.jpg" />
+							<figcaption>Alceu Valença - Anjo Avesso</figcaption>
+						</figure>
+						<div class="compra">
+							<span class="preco">R$ 50,00</span>
+							<label>Quantidade</label>
+							<input type="number" value="0" />
+							<a href="#" onClick="calculaTotal(this)">Adicionar ao carrinho</a>
+						</div>
+					</li>
+					<li>
+						<figure>
+							<img src="./img/charliemingus.jpg" />
+							<figcaption>Charlie Mingus - Unplugged</figcaption>
+						</figure>
+						<div class="compra">
+							<span class="preco">R$ 50,00</span>
+							<label>Quantidade</label>
+							<input type="number" value="0" />
+							<a href="#" onClick="calculaTotal(this)">Adicionar ao carrinho</a>
+						</div>
+					</li>
+					<li>
+						<figure>
+							<img src="./img/earthwindfire_inConcert.jpg" />
+							<figcaption>Earth, Wind and Fire - In Concert</figcaption>
+						</figure>
+						<div class="compra">
+							<span class="preco">R$ 50,00</span>
+							<label>Quantidade</label>
+							<input type="number" value="0" />
+							<a href="#" onClick="calculaTotal(this)">Adicionar ao carrinho</a>
+						</div>
+					</li>
+					<li>
+						<figure>
+							<img src="./img/metallica.jpg" />
+							<figcaption>Metallica</figcaption>
+						</figure>
+						<div class="compra">
+							<span class="preco">R$ 50,00</span>
+							<label>Quantidade</label>
+							<input type="number" value="0" />
+							<a href="#" onClick="calculaTotal(this)">Adicionar ao carrinho</a>
+						</div>
+					</li>
+					<li>
+						<figure>
+							<img src="./img/rodStewart.jpg" />
+							<figcaption>Rod Stewart</figcaption>
+						</figure>
+						<div class="compra">
+							<span class="preco">R$ 50,00</span>
+							<label>Quantidade</label>
+							<input type="number" value="0" />
+							<a href="#" onClick="calculaTotal(this)">Adicionar ao carrinho</a>
+						</div>
+					</li>
+					<li>
+						<figure>
+							<img src="./img/simplered_menWomen.jpg" />
+							<figcaption>Simple Red - Men and Women</figcaption>
+						</figure>
+						<div class="compra">
+							<span class="preco">R$ 50,00</span>
+							<label>Quantidade</label>
+							<input type="number" value="0" />
+							<a href="#" onClick="calculaTotal(this)">Adicionar ao carrinho</a>
+						</div>
+					</li>
+				</ul>
+			</section>
+			<aside>
+				<h1>Minhas Compras</h1>
+				<a href="#">Meu carrinho</a>
+				<ul id="lista">
+				</ul>
+				<ul>
+					<li>Itens: <span id="itens">0</span></li>
+					<li>Valor: R$ <span id="valorTotal">0</span> </li>
+				</ul>
+			</aside>
+
+		</div>
+		<footer>
+			&copy;2016 - Cefet-RJ Nova Friburgo <span>Todos os direitos reservados</span>
+		</footer>
+
+	</body>
+</html>
