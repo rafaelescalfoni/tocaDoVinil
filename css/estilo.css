@@ -19,7 +19,7 @@ section {
 
 aside{
 	width: 300px;
-	float: left;
+	float: right;
 	padding: 10px 5px 10px 15px;
 }
 
@@ -37,12 +37,11 @@ section ul {
 
 section ul li {
 	float: left;
-	width: 170px;
 	height: 250px;
 	border: #000 solid 1px;
 	border-radius: 5px;
 	padding:5px 5px 0px -5px;
-	margin: 5px;
+	margin: 10px 15px;
 }
 
 section figure {
@@ -60,7 +59,7 @@ section figcaption {
 section img {
 	width: 100px;
 	height: 100px;
-	margin-left: 35px;
+	margin: 0 auto;
 }
 
 section label {

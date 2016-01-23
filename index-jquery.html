@@ -2,98 +2,208 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
+		
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+
 		<title>Toca do Vinil - JQuery</title>
-		<link rel="stylesheet" type="text/css" href="./css/estilo.css" />
-		<link rel="stylesheet" type="text/css" href="./js/jquery-ui.css" />
+
 		<script src="./js/jquery.js"></script>
 		<script src="./js/jquery-ui.js"></script>
 		
+
+		<link rel="stylesheet" type="text/css" href="./css/estilo.css" />
+		<link rel="stylesheet" type="text/css" href="./js/jquery-ui.css" />
+		
+		<!-- Latest compiled and minified CSS -->
+		<link rel="stylesheet" href="./bootstrap/css/bootstrap.min.css">
+
+		<!-- Optional theme -->
+		<link rel="stylesheet" href="./bootstrap/css/bootstrap-theme.css">
+
+		<!-- Latest compiled and minified JavaScript -->
+		<script src="./bootstrap/js/bootstrap.min.js"></script>
 		
 		<script>
 		
 		$(function() {	
-			var album1 = new Album();
-			var album2 = new Album();
-			album1.id = "1";
-			album2.id = "2";
-			album2.titulo = "Anjo Avesso";
-			album2.pathImgAlbum = "./img/alceu_AnjoAvesso.jpg";
-			album2.preco = "R$ 40,00";
-
-			//pegar os albuns de algum lugar
-			var albuns = [album1, album2];
-			$(albuns).load("http://localhost:8888/tocaDoVinil/albuns.php");
+		//usar o serviço que será disponibilizado depois
+		//	$(albuns).load("http://localhost:8888/tocaDoVinil/albuns.php");
 			//carregar na página
-			$(albuns).each(function(pos, album){
-				criaItem(album);
-			})
+
+			carregarAlbuns(albuns);
 				
-			
+			$("#advancedSearch").find("a").click(function(){
+				var genero = $(this).attr("title");
+				var albunsSelecionados = filtrarAlbum(genero, albuns);
+				$(albunsSelecionados).each(function(pos, album){
+					console.log("\nalbum " + album.titulo);
+				})
+			});
 		});
 
-			function criaItem(album) {
-				$("#listaAlbuns")
-					.append($("<li />")
-						.append($("<figure />")
-							.append($("<img />")
-								.attr("src", album.pathImgAlbum)
-							)
-							.append($("<figcaption />").text(album.titulo))
-						)
-						.append($("<div />")
-							.append($("<span />")
-								.addClass("preco")
-								.text(album.preco)
-							)
-							.append($("<label />").text("Quantidade"))
-							.append($("<input />")
-								.attr({ "type": "number", "value": "0"})
-							)
-							.append($("<a />")
-								.attr("href", "#")
-								.text("Adicionar ao carrinho")
-							)
-							.addClass("compra")
-						)
-						.attr("id", album.id)
-					);
-			}
-		
-		function Album (){
-			this.id = "1";
-			this.titulo = "Abre-te, Sésamo!";
-			this.artista = "Raul Seixas";
-			this.genero = "Rock Brasileiro";
-			this.ano = "1976";
-			this.pathImgAlbum = "./img/raul-seixas_abretesesamo.jpg";
-			this.valor = "R$ 50,00";
-			this.musicas = ["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"];
+		function carregarAlbuns(albuns) {
+			$("#listaAlbuns").empty();
+			$(albuns).each(function(pos, album){
+				criaItem(album);
+			});
 		}
-			
+
+		function criaItem(album) {
+			$("#listaAlbuns")
+				.append($("<li />")
+					.attr("id", album.id)
+					.addClass("col-xs-12 col-md-3")
+					.append($("<figure />")
+						.append($("<img />")
+							.css("text-align", "center")
+							.attr("src", album.pathImgAlbum)
+						)
+						.append($("<figcaption />")
+							.text(album.titulo)
+							.css({"width":"150px", "text-align":"center"})
+						)
+					)
+					.append($("<div />")
+						.append($("<span />")
+							.addClass("preco")
+							.text(album.preco)
+						)
+						.append($("<label />").text("Quantidade"))
+						.append($("<input />")
+							.attr({ "type": "number", "value": "0"})
+						)
+						.append($("<a />")
+							.attr("href", "#")
+							.text("Adicionar ao carrinho")
+						)
+						.addClass("compra")
+					)
+				);
+		}
+		
+		function filtrarAlbum(genero, albuns) {
+			var albunsSelecionados = [];
+			$(albuns).each(function(pos, album){
+				if(album.genero.toUpperCase().search(genero.toUpperCase())>=0) {
+					albunsSelecionados.push(album);
+				} 
+			});
+			carregarAlbuns(albunsSelecionados);
+			return albunsSelecionados;
+		}
 		</script>
+		
 	</head>
 	<body>
-		<header>
-			Toca do Vinil
-		</header>
-		<div id="container">
+		
+			<header>
+				Toca do Vinil
+			</header>
+			<aside>
+				<input type="text" placeholder="Pesquisar" />
+				
+				<div class="btn-group">
+  					<button type="button" 
+  							class="btn btn-default dropdown-toggle" 
+  							data-toggle="dropdown" 
+  							aria-haspopup="true" aria-expanded="false">
+    					Avançada 
+    					<span class="caret"></span>
+  					</button>
+  					<ul id="advancedSearch" class="dropdown-menu">
+    					<li><a href="#" title="rock">Rock</a></li>
+    					<li><a href="#" title="jazz">Jazz</a></li>
+    					<li><a href="#" title="blues">Blues</a></li>
+    					<li><a href="#" title="infantil">Infantil</a></li>
+    					<li><a href="#" title="clássica">Clássica</a></li>
+					</ul>
+				</div>
+			</aside>
 			<section>
 				<ul id="listaAlbuns"></ul>
 			</section>
-			<aside>
-				<h1>Minhas Compras</h1>
-				<a href="#">Meu carrinho</a>
-				<ul id="lista">
-				</ul>
-				<ul>
-					<li>Itens: <span id="itens">0</span></li>
-					<li>Valor: R$ <span id="valorTotal">0</span> </li>
-				</ul>
-			</aside>
+			
 
-		</div>
-		<footer>
-			&copy;2016 - Cefet-RJ Nova Friburgo <span>Todos os direitos reservados</span>
-		</footer>
+			
+			<footer>
+				&copy;2016 - Cefet-RJ Nova Friburgo <span>Todos os direitos reservados</span>
+			</footer>
+		
 	</body>
+
+	<script>
+		var albuns = [
+	{ 
+		"id" : "1",
+		"titulo": "Abre-te, Sésamo!",
+		"artista": "Raul Seixas",
+		"genero": "Rock Brasileiro",
+		"ano": "1976",
+		"pathImgAlbum": "./img/raul-seixas_abretesesamo.jpg",
+		"valor": "R$ 50,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	},
+	{ 
+		"id" : "2",
+		"titulo": "Anjo Avesso",
+		"artista": "Alceu Valença",
+		"genero": "MPB",
+		"ano": "1983",
+		"pathImgAlbum": "./img/alceu_AnjoAvesso.jpg",
+		"valor": "R$ 55,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	},
+	{ 
+		"id" : "3",
+		"titulo": "Charlie Mingus - Unplugged",
+		"artista": "Charlie Mingus",
+		"genero": "Jazz",
+		"ano": "1963",
+		"pathImgAlbum": "./img/charliemingus.jpg",
+		"valor": "R$ 45,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	},
+	{ 
+		"id" : "4",
+		"titulo": "Earth, Wind & Fire - In Concert",
+		"artista": "Earth, Wind & Fire",
+		"genero": "Black music",
+		"ano": "1978",
+		"pathImgAlbum": "./img/earthwindfire_inConcert.jpg",
+		"valor": "R$ 40,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	},
+	{ 
+		"id" : "5",
+		"titulo": "Rod",
+		"artista": "Rod Stewart",
+		"genero": "Rock Pop",
+		"ano": "1975",
+		"pathImgAlbum": "./img/rodStewart.jpg",
+		"valor": "R$ 30,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	},
+	{ 
+		"id" : "6",
+		"titulo": "Metallica",
+		"artista": "Metallica",
+		"genero": "Heavy Metal",
+		"ano": "1985",
+		"pathImgAlbum": "./img/metallica.jpg",
+		"valor": "R$ 40,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	},
+	{ 
+		"id" : "7",
+		"titulo": "Men Women",
+		"artista": "Simple Red",
+		"genero": "Pop",
+		"ano": "1989",
+		"pathImgAlbum": "./img/simplered_menWomen.jpg",
+		"valor": "R$ 40,00",
+		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+	}
+];
+
+		</script>
 </html>
