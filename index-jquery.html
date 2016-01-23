@@ -39,13 +39,85 @@
 					console.log("\nalbum " + album.titulo);
 				})
 			});
+
+			$("#search").keyup(function(){
+				filtrar($("#search").val(), albuns)
+			});
+
+			$(".imgAlbum").click(function(){
+				$("#fundo").css("visibility", "visible");
+				$("#detalheAlbum").animate({"width":"50%", "height":"50%"});
+				var liPai = $(this).parents("li");
+
+				carregarDetalhes($(liPai).attr("id"), albuns);
+			});
+
+			$("#fundo").click(sumirDetalhe());
+
+			$("#detalheAlbum").click(function(){
+				$("#fundo").off();
+				$(this)
+					.append($("<audio/>")
+						.attr("autoplay", "autoplay")
+						.append($("<source />")
+							.attr({"src" : "./sound/hadouken.mp3"
+									, "type":"audio/mpeg"})
+							)
+						);
+			});
+
+			//remover o audio após tocar
+			$("audio").blur(function(){$(this).remove();});
 		});
+		
+
+		function sumirDetalhe() {
+			$("#detalheAlbum").animate({"width":"0%", "height":"0%"},"slow");
+				$("#fundo").css("visibility", "hidden");
+		}
 
 		function carregarAlbuns(albuns) {
 			$("#listaAlbuns").empty();
 			$(albuns).each(function(pos, album){
 				criaItem(album);
 			});
+		}
+
+		function carregarDetalhes(id, albuns) {
+
+			var album;
+			$(albuns).each(function(pos, obj){
+				if(obj.id == id) {
+					album = obj;
+				}
+			});
+			$("#detalheAlbum").empty();
+
+			$("#detalheAlbum").append($("<img />").attr("src", album.pathImgAlbum));
+			$("#detalheAlbum").append($("<h3 />").text(album.titulo));
+			$("#detalheAlbum").append($("<p />").text(album.artista));
+			$("#detalheAlbum").append($("<p />").text(album.genero));
+			
+			$("#detalheAlbum").append($("<ol />"));
+			$(album.musicas).each(function(pos, musica){
+				$("#detalheAlbum").find("ol")
+										.append($("<li />")
+											.text(musica)
+											.append($("<span />")
+													.addClass("glyphicon glyphicon-volume-up")
+													.attr("id", album.titulo+"_"+musica)
+													)
+												
+										);
+			});
+		}
+
+		function pesquisaAlbumPorId(id, albuns) {
+			$(albuns).each(function(pos, album){
+				if(album.id == id) {
+					return album;
+				}
+			})
 		}
 
 		function criaItem(album) {
@@ -56,6 +128,7 @@
 					.append($("<figure />")
 						.append($("<img />")
 							.css("text-align", "center")
+							.addClass("imgAlbum")
 							.attr("src", album.pathImgAlbum)
 						)
 						.append($("<figcaption />")
@@ -80,16 +153,30 @@
 					)
 				);
 		}
-		
+
 		function filtrarAlbum(genero, albuns) {
 			var albunsSelecionados = [];
 			$(albuns).each(function(pos, album){
 				if(album.genero.toUpperCase().search(genero.toUpperCase())>=0) {
 					albunsSelecionados.push(album);
 				} 
+				if(genero == "todos") {
+					albunsSelecionados.push(album);	
+				}
 			});
 			carregarAlbuns(albunsSelecionados);
 			return albunsSelecionados;
+		}
+
+		function filtrar(keyword, albuns) {
+			var albunsSelecionados = [];
+			$(albuns).each(function(pos, album){
+				if(album.titulo.toUpperCase().search(keyword)>=0 ||
+				   album.artista.toUpperCase().search(keyword)>=0){
+					albunsSelecionados.push(album);	
+				}
+				carregarAlbuns(albunsSelecionados)
+			})
 		}
 		</script>
 		
@@ -100,7 +187,7 @@
 				Toca do Vinil
 			</header>
 			<aside>
-				<input type="text" placeholder="Pesquisar" />
+				<input type="text" id="search" placeholder="Pesquisar" />
 				
 				<div class="btn-group">
   					<button type="button" 
@@ -111,6 +198,7 @@
     					<span class="caret"></span>
   					</button>
   					<ul id="advancedSearch" class="dropdown-menu">
+  						<li><a href="#" title="todos">Todos</a></li>
     					<li><a href="#" title="rock">Rock</a></li>
     					<li><a href="#" title="jazz">Jazz</a></li>
     					<li><a href="#" title="blues">Blues</a></li>
@@ -129,6 +217,17 @@
 				&copy;2016 - Cefet-RJ Nova Friburgo <span>Todos os direitos reservados</span>
 			</footer>
 		
+			<div id="fundo">
+				<div id="detalheAlbum">
+					<img style="float:left"/>
+					<h3>titulo</h3>
+					<p></p>
+					<p></p>
+					<ol>
+						
+					</ol>
+				</div>
+			</div>
 	</body>
 
 	<script>
