@@ -9,7 +9,8 @@
 
 		<script src="./js/jquery.js"></script>
 		<script src="./js/jquery-ui.js"></script>
-		
+
+		<script type="text/javascript" src="./js/indexController.js"></script>
 
 		<link rel="stylesheet" type="text/css" href="./css/estilo.css" />
 		<link rel="stylesheet" type="text/css" href="./js/jquery-ui.css" />
@@ -23,7 +24,9 @@
 		<!-- Latest compiled and minified JavaScript -->
 		<script src="./bootstrap/js/bootstrap.min.js"></script>
 		
+
 		<script>
+
 		
 		$(function() {	
 		//usar o serviço que será disponibilizado depois
@@ -34,10 +37,7 @@
 				
 			$("#advancedSearch").find("a").click(function(){
 				var genero = $(this).attr("title");
-				var albunsSelecionados = filtrarAlbum(genero, albuns);
-				$(albunsSelecionados).each(function(pos, album){
-					console.log("\nalbum " + album.titulo);
-				})
+				filtrarAlbum(genero, albuns);
 			});
 
 			$("#search").keyup(function(){
@@ -45,139 +45,14 @@
 			});
 
 			$(".imgAlbum").click(function(){
-				$("#fundo").css("visibility", "visible");
-				$("#detalheAlbum").animate({"width":"50%", "height":"50%"});
 				var liPai = $(this).parents("li");
-
 				carregarDetalhes($(liPai).attr("id"), albuns);
 			});
 
-			$("#fundo").click(sumirDetalhe());
-
-			$("#detalheAlbum").click(function(){
-				$("#fundo").off();
-				$(this)
-					.append($("<audio/>")
-						.attr("autoplay", "autoplay")
-						.append($("<source />")
-							.attr({"src" : "./sound/hadouken.mp3"
-									, "type":"audio/mpeg"})
-							)
-						);
-			});
-
-			//remover o audio após tocar
-			$("audio").blur(function(){$(this).remove();});
+			$("#fecharDetalhes").click(function(e){sumirDetalhe(e)});
 		});
 		
 
-		function sumirDetalhe() {
-			$("#detalheAlbum").animate({"width":"0%", "height":"0%"},"slow");
-				$("#fundo").css("visibility", "hidden");
-		}
-
-		function carregarAlbuns(albuns) {
-			$("#listaAlbuns").empty();
-			$(albuns).each(function(pos, album){
-				criaItem(album);
-			});
-		}
-
-		function carregarDetalhes(id, albuns) {
-
-			var album;
-			$(albuns).each(function(pos, obj){
-				if(obj.id == id) {
-					album = obj;
-				}
-			});
-			$("#detalheAlbum").empty();
-
-			$("#detalheAlbum").append($("<img />").attr("src", album.pathImgAlbum));
-			$("#detalheAlbum").append($("<h3 />").text(album.titulo));
-			$("#detalheAlbum").append($("<p />").text(album.artista));
-			$("#detalheAlbum").append($("<p />").text(album.genero));
-			
-			$("#detalheAlbum").append($("<ol />"));
-			$(album.musicas).each(function(pos, musica){
-				$("#detalheAlbum").find("ol")
-										.append($("<li />")
-											.text(musica)
-											.append($("<span />")
-													.addClass("glyphicon glyphicon-volume-up")
-													.attr("id", album.titulo+"_"+musica)
-													)
-												
-										);
-			});
-		}
-
-		function pesquisaAlbumPorId(id, albuns) {
-			$(albuns).each(function(pos, album){
-				if(album.id == id) {
-					return album;
-				}
-			})
-		}
-
-		function criaItem(album) {
-			$("#listaAlbuns")
-				.append($("<li />")
-					.attr("id", album.id)
-					.addClass("col-xs-12 col-md-3")
-					.append($("<figure />")
-						.append($("<img />")
-							.css("text-align", "center")
-							.addClass("imgAlbum")
-							.attr("src", album.pathImgAlbum)
-						)
-						.append($("<figcaption />")
-							.text(album.titulo)
-							.css({"width":"150px", "text-align":"center"})
-						)
-					)
-					.append($("<div />")
-						.append($("<span />")
-							.addClass("preco")
-							.text(album.preco)
-						)
-						.append($("<label />").text("Quantidade"))
-						.append($("<input />")
-							.attr({ "type": "number", "value": "0"})
-						)
-						.append($("<a />")
-							.attr("href", "#")
-							.text("Adicionar ao carrinho")
-						)
-						.addClass("compra")
-					)
-				);
-		}
-
-		function filtrarAlbum(genero, albuns) {
-			var albunsSelecionados = [];
-			$(albuns).each(function(pos, album){
-				if(album.genero.toUpperCase().search(genero.toUpperCase())>=0) {
-					albunsSelecionados.push(album);
-				} 
-				if(genero == "todos") {
-					albunsSelecionados.push(album);	
-				}
-			});
-			carregarAlbuns(albunsSelecionados);
-			return albunsSelecionados;
-		}
-
-		function filtrar(keyword, albuns) {
-			var albunsSelecionados = [];
-			$(albuns).each(function(pos, album){
-				if(album.titulo.toUpperCase().search(keyword)>=0 ||
-				   album.artista.toUpperCase().search(keyword)>=0){
-					albunsSelecionados.push(album);	
-				}
-				carregarAlbuns(albunsSelecionados)
-			})
-		}
 		</script>
 		
 	</head>
@@ -217,17 +92,9 @@
 				&copy;2016 - Cefet-RJ Nova Friburgo <span>Todos os direitos reservados</span>
 			</footer>
 		
-			<div id="fundo">
-				<div id="detalheAlbum">
-					<img style="float:left"/>
-					<h3>titulo</h3>
-					<p></p>
-					<p></p>
-					<ol>
-						
-					</ol>
-				</div>
-			</div>
+			<div id="fundo"></div>
+			<div id="detalheAlbum">	</div>
+			
 	</body>
 
 	<script>
@@ -236,71 +103,113 @@
 		"id" : "1",
 		"titulo": "Abre-te, Sésamo!",
 		"artista": "Raul Seixas",
+		"sobreArtista": "Charles Mingus (22 de Abril de 1922 – 5 de Janeiro de 1979) foi um contrabaixista, compositor e ocasionalmente pianista de Jazz. Ele também ficou conhecido pelo seu ativismo contra a injustiça racial.",
+		"sobreAlbum" : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
 		"genero": "Rock Brasileiro",
 		"ano": "1976",
 		"pathImgAlbum": "./img/raul-seixas_abretesesamo.jpg",
 		"valor": "R$ 50,00",
-		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+		"musicas":[{"nome":"faixa 01", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 02", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 03", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 04", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 05", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}]
 	},
 	{ 
 		"id" : "2",
 		"titulo": "Anjo Avesso",
 		"artista": "Alceu Valença",
+		"sobreArtista": "Charles Mingus (22 de Abril de 1922 – 5 de Janeiro de 1979) foi um contrabaixista, compositor e ocasionalmente pianista de Jazz. Ele também ficou conhecido pelo seu ativismo contra a injustiça racial.",
+		"sobreAlbum" : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
 		"genero": "MPB",
 		"ano": "1983",
 		"pathImgAlbum": "./img/alceu_AnjoAvesso.jpg",
 		"valor": "R$ 55,00",
-		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+		"musicas":[{"nome":"faixa 01", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 02", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 03", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 04", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 05", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}]
 	},
 	{ 
 		"id" : "3",
 		"titulo": "Charlie Mingus - Unplugged",
 		"artista": "Charlie Mingus",
+		"sobreArtista": "Charles Mingus (22 de Abril de 1922 – 5 de Janeiro de 1979) foi um contrabaixista, compositor e ocasionalmente pianista de Jazz. Ele também ficou conhecido pelo seu ativismo contra a injustiça racial.",
+		"sobreAlbum" : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
 		"genero": "Jazz",
 		"ano": "1963",
 		"pathImgAlbum": "./img/charliemingus.jpg",
 		"valor": "R$ 45,00",
-		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+		"musicas":[{"nome":"faixa 01", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 02", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 03", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 04", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 05", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}]
 	},
 	{ 
 		"id" : "4",
 		"titulo": "Earth, Wind & Fire - In Concert",
 		"artista": "Earth, Wind & Fire",
+		"sobreArtista": "Charles Mingus (22 de Abril de 1922 – 5 de Janeiro de 1979) foi um contrabaixista, compositor e ocasionalmente pianista de Jazz. Ele também ficou conhecido pelo seu ativismo contra a injustiça racial.",
+		"sobreAlbum" : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
 		"genero": "Black music",
 		"ano": "1978",
 		"pathImgAlbum": "./img/earthwindfire_inConcert.jpg",
 		"valor": "R$ 40,00",
-		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+		"musicas":[{"nome":"faixa 01", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 02", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 03", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 04", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 05", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}]
 	},
 	{ 
 		"id" : "5",
 		"titulo": "Rod",
 		"artista": "Rod Stewart",
+		"sobreArtista": "Charles Mingus (22 de Abril de 1922 – 5 de Janeiro de 1979) foi um contrabaixista, compositor e ocasionalmente pianista de Jazz. Ele também ficou conhecido pelo seu ativismo contra a injustiça racial.",
+		"sobreAlbum" : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
 		"genero": "Rock Pop",
 		"ano": "1975",
 		"pathImgAlbum": "./img/rodStewart.jpg",
 		"valor": "R$ 30,00",
-		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+		"musicas":[{"nome":"faixa 01", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 02", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 03", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 04", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 05", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}]
 	},
 	{ 
 		"id" : "6",
 		"titulo": "Metallica",
 		"artista": "Metallica",
+		"sobreArtista": "Charles Mingus (22 de Abril de 1922 – 5 de Janeiro de 1979) foi um contrabaixista, compositor e ocasionalmente pianista de Jazz. Ele também ficou conhecido pelo seu ativismo contra a injustiça racial.",
+		"sobreAlbum" : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
 		"genero": "Heavy Metal",
 		"ano": "1985",
 		"pathImgAlbum": "./img/metallica.jpg",
 		"valor": "R$ 40,00",
-		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+		"musicas":[{"nome":"faixa 01", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 02", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 03", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 04", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 05", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}]
 	},
 	{ 
 		"id" : "7",
 		"titulo": "Men Women",
 		"artista": "Simple Red",
+		"sobreArtista": "Charles Mingus (22 de Abril de 1922 – 5 de Janeiro de 1979) foi um contrabaixista, compositor e ocasionalmente pianista de Jazz. Ele também ficou conhecido pelo seu ativismo contra a injustiça racial.",
+		"sobreAlbum" : "Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo.",
 		"genero": "Pop",
 		"ano": "1989",
 		"pathImgAlbum": "./img/simplered_menWomen.jpg",
 		"valor": "R$ 40,00",
-		"musicas":["faixa 01","faixa 02","faixa 03","faixa 04","faixa 05"]
+		"musicas":[{"nome":"faixa 01", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 02", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 03", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 04", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}
+					,{"nome":"faixa 05", "trecho": "./sound/hadouken.mp3", "formato": "audio/mpeg"}]
 	}
 ];
 

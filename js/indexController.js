@@ -83,39 +83,63 @@ function pesquisaAlbumPorId(id, albuns) {
 function carregarDetalhes(id, albuns) {
 	var album;
 
-	
-
 	$(albuns).each(function(pos, obj){
 		if(obj.id == id) {
 			album = obj;
 		}
 	});
+
 	$("#detalheAlbum").empty();
 
-	$("#detalheAlbum").append($("<img />").attr("src", album.pathImgAlbum));
-	$("#detalheAlbum").append($("<h3 />").text(album.titulo));
-	$("#detalheAlbum").append($("<p />").text(album.artista));
-	$("#detalheAlbum").append($("<p />").text(album.genero));
-	
-	$("#detalheAlbum").append($("<ol />"));
+	$("#detalheAlbum")
+		.append($("<a />")
+			.attr("id", "fecharDetalhes")
+			.append($("<span />").addClass("glyphicon glyphicon-remove-circle")))
+		.append($("<img />").attr("src", album.pathImgAlbum))
+		.append($("<h1 />").text(album.titulo))
+		.append($("<cite />").text(album.sobreAlbum))
+		.append($("<h3 />").text(album.artista))
+		.append($("<cite />").text(album.sobreArtista))
+		.append($("<p />").text(album.genero))
+		.append($("<h3 />").text("Faixas do Álbum"))
+		.append($("<ol />"));
+
 	$(album.musicas).each(function(pos, musica){
-		$("#detalheAlbum").find("ol")
-								.append($("<li />")
-									.text(musica)
-									.append($("<audio />")
-										.attr("controls", "controls")
-										.append($("<source />")
-											.attr({"src" : "./sound/hadouken.mp3"
-												 , "type":"audio/mpeg"})
-										)
-									)	
-								);
+		$("#detalheAlbum")
+			.find("ol")
+				.append($("<li />")
+					.text(musica.nome)
+					.append($("<audio />")
+						.attr("controls", "controls")
+						.append($("<source />")
+							.attr({"src" : musica.trecho
+								 , "type": musica.formato})
+						)
+					)	
+				);
 	});
+
+	var alturaDocumento = $(document).height();
+	var larguraDocumento = $(document).width();
+	
+	$('#fundo')
+		.css({'width':larguraDocumento,'height':alturaDocumento, 'display': 'table'})
+		.fadeTo("slow",0.8);
+
+	var detalheAlbumLeft = ((larguraDocumento/2) - ($("#detalheAlbum").width()/2));
+
+	$("#detalheAlbum")
+		.css({'top':  '30px','left': detalheAlbumLeft, 'display': 'table'})
+		.fadeIn(2000);
+
 }
 
-function sumirDetalhe() {
-	$("#detalheAlbum").animate({"width":"0%", "height":"0%"},"slow");
-	$("#fundo").css("visibility", "hidden");
-	$("#detalheAlbum").find("audio").remove();	
+function sumirDetalhe(evento) {
+	evento.preventDefault();
+	
+	$("#detalheAlbum")
+		.empty()
+		.hide();	
+	$("#fundo").hide();
 }
 
